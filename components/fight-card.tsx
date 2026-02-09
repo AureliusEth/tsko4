@@ -120,7 +120,7 @@ export function FightCard({ fightLabel, fighterA, fighterB, onBack }: FightCardP
 
       {/* Bottom logo */}
       <div className="flex justify-center py-8">
-        <XLogo className="w-10 h-10 text-foreground" />
+        <XLogo className="w-14" />
       </div>
     </div>
   )

@@ -37,7 +37,7 @@ export function FightMenu({ fights, onSelectFight }: FightMenuProps) {
       </nav>
 
       <div className="mt-16">
-        <XLogo className="w-10 h-10 text-foreground" />
+        <XLogo className="w-14" />
       </div>
     </div>
   )
