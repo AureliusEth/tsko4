@@ -31,44 +31,54 @@ export function FightCard({ fightLabel, fighterA, fighterB, onBack }: FightCardP
         {"< back"}
       </button>
 
-      {/* Fight label */}
-      <div className="text-center pt-16 pb-4">
-        <h1 className="text-foreground lowercase tracking-wider" style={{ fontSize: "clamp(1rem, 3vw, 1.5rem)" }}>
-          {fightLabel}
-        </h1>
-      </div>
+      {/* Main matchup area - fills the screen */}
+      <div className="flex-1 flex flex-col">
+        {/* Fighter names row */}
+        <div className="flex items-center justify-between px-8 md:px-16 pt-16 pb-2">
+          <span
+            className="text-foreground lowercase tracking-wider"
+            style={{ fontSize: "clamp(1.4rem, 4vw, 2.5rem)" }}
+          >
+            {fighterA.name}
+          </span>
+          <span
+            className="text-foreground lowercase tracking-wider"
+            style={{ fontSize: "clamp(1.4rem, 4vw, 2.5rem)" }}
+          >
+            {fighterB.name}
+          </span>
+        </div>
 
-      {/* Main matchup area */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="relative flex items-center justify-center w-full max-w-4xl">
+        {/* Fighters and center text */}
+        <div className="relative flex-1 flex items-stretch">
           {/* Left bar */}
-          <div className="absolute left-0 top-0 bottom-0 w-1 bg-foreground hidden md:block" />
+          <div className="w-1.5 bg-foreground shrink-0" />
 
-          {/* Fighter A (left) */}
+          {/* Fighter A */}
           <button
             type="button"
             onClick={() => setVoted(fighterA.name)}
-            className={`relative flex-1 flex flex-col items-center cursor-pointer transition-all duration-300 group ${
-              voted === fighterA.name ? "opacity-100 scale-105" : voted ? "opacity-40" : "hover:scale-105"
+            className={`relative flex-1 cursor-pointer transition-all duration-300 overflow-hidden ${
+              voted === fighterA.name
+                ? "opacity-100"
+                : voted
+                  ? "opacity-30"
+                  : "hover:scale-[1.02]"
             }`}
             aria-label={`Vote for ${fighterA.name}`}
           >
-            <span className="text-foreground lowercase tracking-wider mb-4" style={{ fontSize: "clamp(1.2rem, 3vw, 2rem)" }}>
-              {fighterA.name}
-            </span>
-            <div className="relative w-48 h-80 md:w-64 md:h-[28rem]">
-              <Image
-                src={fighterA.image || "/placeholder.svg"}
-                alt={fighterA.name}
-                fill
-                className="object-contain object-center"
-                sizes="(max-width: 768px) 50vw, 256px"
-              />
-            </div>
+            <Image
+              src={fighterA.image || "/placeholder.svg"}
+              alt={fighterA.name}
+              fill
+              className="object-contain object-bottom"
+              style={{ mixBlendMode: "multiply" }}
+              sizes="50vw"
+            />
           </button>
 
           {/* Center text - vertical */}
-          <div className="flex flex-col items-center justify-center mx-2 md:mx-6">
+          <div className="flex flex-col items-center justify-center shrink-0 z-10">
             <p
               className="text-foreground lowercase tracking-wider text-center"
               style={{
@@ -82,31 +92,31 @@ export function FightCard({ fightLabel, fighterA, fighterB, onBack }: FightCardP
             </p>
           </div>
 
-          {/* Fighter B (right) */}
+          {/* Fighter B */}
           <button
             type="button"
             onClick={() => setVoted(fighterB.name)}
-            className={`relative flex-1 flex flex-col items-center cursor-pointer transition-all duration-300 group ${
-              voted === fighterB.name ? "opacity-100 scale-105" : voted ? "opacity-40" : "hover:scale-105"
+            className={`relative flex-1 cursor-pointer transition-all duration-300 overflow-hidden ${
+              voted === fighterB.name
+                ? "opacity-100"
+                : voted
+                  ? "opacity-30"
+                  : "hover:scale-[1.02]"
             }`}
             aria-label={`Vote for ${fighterB.name}`}
           >
-            <span className="text-foreground lowercase tracking-wider mb-4" style={{ fontSize: "clamp(1.2rem, 3vw, 2rem)" }}>
-              {fighterB.name}
-            </span>
-            <div className="relative w-48 h-80 md:w-64 md:h-[28rem]">
-              <Image
-                src={fighterB.image || "/placeholder.svg"}
-                alt={fighterB.name}
-                fill
-                className="object-contain object-center"
-                sizes="(max-width: 768px) 50vw, 256px"
-              />
-            </div>
+            <Image
+              src={fighterB.image || "/placeholder.svg"}
+              alt={fighterB.name}
+              fill
+              className="object-contain object-bottom"
+              style={{ mixBlendMode: "multiply" }}
+              sizes="50vw"
+            />
           </button>
 
           {/* Right bar */}
-          <div className="absolute right-0 top-0 bottom-0 w-1 bg-foreground hidden md:block" />
+          <div className="w-1.5 bg-foreground shrink-0" />
         </div>
       </div>
 
