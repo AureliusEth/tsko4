@@ -1,12 +1,12 @@
 import Image from "next/image"
 
-export function XLogo({ className = "w-16" }: { className?: string }) {
+export function XLogo({ className = "w-14" }: { className?: string }) {
   return (
     <Image
       src="/images/websitelogo.jpg"
       alt="Fight Night logo"
-      width={120}
-      height={80}
+      width={240}
+      height={160}
       className={`${className} h-auto`}
     />
   )
