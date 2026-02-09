@@ -14,29 +14,40 @@ interface FightCardProps {
   fightLabel: string
   fighterA: Fighter
   fighterB: Fighter
+  mockVotes?: Record<string, number>
   onBack: () => void
 }
 
-export function FightCard({ fightId, fightLabel, fighterA, fighterB, onBack }: FightCardProps) {
+export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, onBack }: FightCardProps) {
   const [voted, setVoted] = useState<string | null>(null)
   const [counts, setCounts] = useState<Record<string, number>>({})
   const [total, setTotal] = useState(0)
   const [voting, setVoting] = useState(false)
 
-  // Fetch existing votes on mount
+  // Fetch existing votes on mount (merge with mock data)
   const fetchVotes = useCallback(async () => {
     try {
       const res = await fetch(`/api/votes/${fightId}`)
       if (res.ok) {
         const data = await res.json()
-        setCounts(data.counts || {})
-        setTotal(data.total || 0)
+        const realCounts: Record<string, number> = data.counts || {}
+
+        // Merge mock votes with real votes
+        if (mockVotes) {
+          for (const [name, count] of Object.entries(mockVotes)) {
+            realCounts[name] = (realCounts[name] || 0) + count
+          }
+        }
+
+        const realTotal = Object.values(realCounts).reduce((sum, c) => sum + c, 0)
+        setCounts(realCounts)
+        setTotal(realTotal)
         if (data.userVote) setVoted(data.userVote)
       }
     } catch (err) {
       console.error("Failed to fetch votes:", err)
     }
-  }, [fightId])
+  }, [fightId, mockVotes])
 
   useEffect(() => {
     fetchVotes()
@@ -76,6 +87,9 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, onBack }: F
     return Math.round(((counts[name] || 0) / total) * 100)
   }
 
+  const pctA = getPercentage(fighterA.name)
+  const pctB = getPercentage(fighterB.name)
+
   return (
     <div className="flex flex-col min-h-screen bg-background">
       {/* Back button */}
@@ -97,21 +111,26 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, onBack }: F
             style={{ fontSize: "clamp(1.4rem, 4vw, 2.5rem)" }}
           >
             {fighterA.name}
-            {voted && <span className="ml-2 text-muted-foreground" style={{ fontSize: "0.6em" }}>{getPercentage(fighterA.name)}%</span>}
+            {voted && <span className="ml-2 text-muted-foreground" style={{ fontSize: "0.6em" }}>{pctA}%</span>}
           </span>
           <span
             className="text-foreground lowercase tracking-wider"
             style={{ fontSize: "clamp(1.4rem, 4vw, 2.5rem)" }}
           >
-            {voted && <span className="mr-2 text-muted-foreground" style={{ fontSize: "0.6em" }}>{getPercentage(fighterB.name)}%</span>}
+            {voted && <span className="mr-2 text-muted-foreground" style={{ fontSize: "0.6em" }}>{pctB}%</span>}
             {fighterB.name}
           </span>
         </div>
 
         {/* Fighters and center text */}
         <div className="relative flex-1 flex items-stretch">
-          {/* Left bar */}
-          <div className="w-1.5 bg-foreground shrink-0" />
+          {/* Left bar - height scales like a progress bar with fighter A votes */}
+          <div className="shrink-0 flex flex-col justify-end ml-4 md:ml-8" style={{ width: "9px" }}>
+            <div
+              className="w-full bg-foreground transition-all duration-700 ease-out"
+              style={{ height: voted ? `${Math.max(2, pctA)}%` : "100%" }}
+            />
+          </div>
 
           {/* Fighter A */}
           <button
@@ -178,8 +197,13 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, onBack }: F
             />
           </button>
 
-          {/* Right bar */}
-          <div className="w-1.5 bg-foreground shrink-0" />
+          {/* Right bar - height scales like a progress bar with fighter B votes */}
+          <div className="shrink-0 flex flex-col justify-end mr-4 md:mr-8" style={{ width: "9px" }}>
+            <div
+              className="w-full bg-foreground transition-all duration-700 ease-out"
+              style={{ height: voted ? `${Math.max(2, pctB)}%` : "100%" }}
+            />
+          </div>
         </div>
       </div>
 
