@@ -72,7 +72,6 @@ export function FightCard({ fightLabel, fighterA, fighterB, onBack }: FightCardP
               alt={fighterA.name}
               fill
               className="object-contain object-bottom"
-              style={{ mixBlendMode: "multiply" }}
               sizes="50vw"
             />
           </button>
@@ -110,7 +109,6 @@ export function FightCard({ fightLabel, fighterA, fighterB, onBack }: FightCardP
               alt={fighterB.name}
               fill
               className="object-contain object-bottom"
-              style={{ mixBlendMode: "multiply" }}
               sizes="50vw"
             />
           </button>

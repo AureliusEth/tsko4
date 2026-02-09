@@ -10,11 +10,11 @@ const fights = [
     label: "fight 01",
     fighterA: {
       name: "seyi",
-      image: "/images/seyimatchup.jpeg",
+      image: "/images/seyimatchup.jpg",
     },
     fighterB: {
       name: "logan",
-      image: "/images/loganmatchup.jpeg",
+      image: "/images/loganmatchup.jpg",
     },
   },
   {
@@ -22,11 +22,11 @@ const fights = [
     label: "fight 02",
     fighterA: {
       name: "fighter a",
-      image: "/images/seyimatchup.jpeg",
+      image: "/images/seyimatchup.jpg",
     },
     fighterB: {
       name: "fighter b",
-      image: "/images/loganmatchup.jpeg",
+      image: "/images/loganmatchup.jpg",
     },
   },
   {
@@ -34,11 +34,11 @@ const fights = [
     label: "fight 03",
     fighterA: {
       name: "fighter c",
-      image: "/images/seyimatchup.jpeg",
+      image: "/images/seyimatchup.jpg",
     },
     fighterB: {
       name: "fighter d",
-      image: "/images/loganmatchup.jpeg",
+      image: "/images/loganmatchup.jpg",
     },
   },
   {
@@ -46,11 +46,11 @@ const fights = [
     label: "fight 04",
     fighterA: {
       name: "fighter e",
-      image: "/images/seyimatchup.jpeg",
+      image: "/images/seyimatchup.jpg",
     },
     fighterB: {
       name: "fighter f",
-      image: "/images/loganmatchup.jpeg",
+      image: "/images/loganmatchup.jpg",
     },
   },
   {
@@ -58,11 +58,11 @@ const fights = [
     label: "fight 05",
     fighterA: {
       name: "fighter g",
-      image: "/images/seyimatchup.jpeg",
+      image: "/images/seyimatchup.jpg",
     },
     fighterB: {
       name: "fighter h",
-      image: "/images/loganmatchup.jpeg",
+      image: "/images/loganmatchup.jpg",
     },
   },
   {
@@ -70,11 +70,11 @@ const fights = [
     label: "fight 06",
     fighterA: {
       name: "fighter i",
-      image: "/images/seyimatchup.jpeg",
+      image: "/images/seyimatchup.jpg",
     },
     fighterB: {
       name: "fighter j",
-      image: "/images/loganmatchup.jpeg",
+      image: "/images/loganmatchup.jpg",
     },
   },
 ]
