@@ -88,6 +88,7 @@ export default function Page() {
     return (
       <main>
         <FightCard
+          fightId={activeFight.id}
           fightLabel={activeFight.label}
           fighterA={activeFight.fighterA}
           fighterB={activeFight.fighterB}

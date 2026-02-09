@@ -12,8 +12,8 @@ export function FightMenu({ fights, onSelectFight }: FightMenuProps) {
   const [hoveredId, setHoveredId] = useState<number | null>(null)
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background px-6 py-12">
-      <nav className="flex flex-col items-center gap-8" aria-label="Fight card menu">
+    <div className="flex flex-col items-center h-screen bg-background px-6 py-10">
+      <nav className="flex flex-col items-center justify-evenly flex-1 w-full" aria-label="Fight card menu">
         {fights.map((fight) => {
           const isHovered = hoveredId === fight.id
           return (
@@ -22,7 +22,7 @@ export function FightMenu({ fights, onSelectFight }: FightMenuProps) {
               type="button"
               className="transition-all duration-300 ease-out cursor-pointer text-foreground lowercase tracking-wider select-none hover:opacity-80"
               style={{
-                fontSize: isHovered ? "clamp(3rem, 8vw, 6rem)" : "clamp(1.5rem, 4vw, 2.5rem)",
+                fontSize: isHovered ? "clamp(5rem, 15vw, 12rem)" : "clamp(2.5rem, 7vw, 4rem)",
                 lineHeight: 1.2,
               }}
               onMouseEnter={() => setHoveredId(fight.id)}
@@ -36,8 +36,8 @@ export function FightMenu({ fights, onSelectFight }: FightMenuProps) {
         })}
       </nav>
 
-      <div className="mt-16">
-        <XLogo className="w-14" />
+      <div className="py-6">
+        <XLogo className="w-20" />
       </div>
     </div>
   )

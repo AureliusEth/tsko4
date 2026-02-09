@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useCallback } from "react"
 import Image from "next/image"
 import { XLogo } from "./x-logo"
 
@@ -10,14 +10,71 @@ interface Fighter {
 }
 
 interface FightCardProps {
+  fightId: number
   fightLabel: string
   fighterA: Fighter
   fighterB: Fighter
   onBack: () => void
 }
 
-export function FightCard({ fightLabel, fighterA, fighterB, onBack }: FightCardProps) {
+export function FightCard({ fightId, fightLabel, fighterA, fighterB, onBack }: FightCardProps) {
   const [voted, setVoted] = useState<string | null>(null)
+  const [counts, setCounts] = useState<Record<string, number>>({})
+  const [total, setTotal] = useState(0)
+  const [voting, setVoting] = useState(false)
+
+  // Fetch existing votes on mount
+  const fetchVotes = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/votes/${fightId}`)
+      if (res.ok) {
+        const data = await res.json()
+        setCounts(data.counts || {})
+        setTotal(data.total || 0)
+        if (data.userVote) setVoted(data.userVote)
+      }
+    } catch (err) {
+      console.error("Failed to fetch votes:", err)
+    }
+  }, [fightId])
+
+  useEffect(() => {
+    fetchVotes()
+  }, [fetchVotes])
+
+  const castVote = async (fighterName: string) => {
+    if (voted || voting) return
+    setVoting(true)
+
+    try {
+      const res = await fetch("/api/votes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fightId, fighter: fighterName }),
+      })
+
+      const data = await res.json()
+
+      if (res.ok) {
+        setVoted(fighterName)
+        // Refresh counts
+        await fetchVotes()
+      } else if (data.error === "already_voted") {
+        // They already voted (maybe from another tab or IP match)
+        setVoted(data.vote)
+        await fetchVotes()
+      }
+    } catch (err) {
+      console.error("Failed to vote:", err)
+    } finally {
+      setVoting(false)
+    }
+  }
+
+  const getPercentage = (name: string) => {
+    if (total === 0) return 0
+    return Math.round(((counts[name] || 0) / total) * 100)
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -40,11 +97,13 @@ export function FightCard({ fightLabel, fighterA, fighterB, onBack }: FightCardP
             style={{ fontSize: "clamp(1.4rem, 4vw, 2.5rem)" }}
           >
             {fighterA.name}
+            {voted && <span className="ml-2 text-muted-foreground" style={{ fontSize: "0.6em" }}>{getPercentage(fighterA.name)}%</span>}
           </span>
           <span
             className="text-foreground lowercase tracking-wider"
             style={{ fontSize: "clamp(1.4rem, 4vw, 2.5rem)" }}
           >
+            {voted && <span className="mr-2 text-muted-foreground" style={{ fontSize: "0.6em" }}>{getPercentage(fighterB.name)}%</span>}
             {fighterB.name}
           </span>
         </div>
@@ -57,14 +116,15 @@ export function FightCard({ fightLabel, fighterA, fighterB, onBack }: FightCardP
           {/* Fighter A */}
           <button
             type="button"
-            onClick={() => setVoted(fighterA.name)}
+            onClick={() => castVote(fighterA.name)}
+            disabled={!!voted || voting}
             className={`relative flex-1 cursor-pointer transition-all duration-300 overflow-hidden ${
               voted === fighterA.name
                 ? "opacity-100"
                 : voted
                   ? "opacity-30"
                   : "hover:scale-[1.02]"
-            }`}
+            } ${voted || voting ? "cursor-default" : ""}`}
             aria-label={`Vote for ${fighterA.name}`}
           >
             <Image
@@ -87,21 +147,26 @@ export function FightCard({ fightLabel, fighterA, fighterB, onBack }: FightCardP
                 letterSpacing: "0.15em",
               }}
             >
-              {voted ? `you voted ${voted}` : "click your fighter to vote"}
+              {voting
+                ? "voting..."
+                : voted
+                  ? `you voted ${voted}`
+                  : "click your fighter to vote"}
             </p>
           </div>
 
           {/* Fighter B */}
           <button
             type="button"
-            onClick={() => setVoted(fighterB.name)}
+            onClick={() => castVote(fighterB.name)}
+            disabled={!!voted || voting}
             className={`relative flex-1 cursor-pointer transition-all duration-300 overflow-hidden ${
               voted === fighterB.name
                 ? "opacity-100"
                 : voted
                   ? "opacity-30"
                   : "hover:scale-[1.02]"
-            }`}
+            } ${voted || voting ? "cursor-default" : ""}`}
             aria-label={`Vote for ${fighterB.name}`}
           >
             <Image
