@@ -1,0 +1,15 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - COOKIE_SECRET=${COOKIE_SECRET:-change-me-to-a-random-secret}
+    volumes:
+      # Persist the SQLite database across container restarts
+      - db-data:/app/prisma
+    restart: unless-stopped
+
+volumes:
+  db-data:
