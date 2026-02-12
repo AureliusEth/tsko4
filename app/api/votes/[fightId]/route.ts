@@ -47,7 +47,11 @@ export async function GET(
       }
     }
 
-    return NextResponse.json({ counts, userVote, total })
+    // Cache vote counts for 2 seconds — prevents stampede during live voting
+    // while keeping results near real-time
+    const response = NextResponse.json({ counts, userVote, total })
+    response.headers.set("Cache-Control", "public, s-maxage=2, stale-while-revalidate=5")
+    return response
   } catch (error) {
     console.error("Get votes error:", error)
     return NextResponse.json(
