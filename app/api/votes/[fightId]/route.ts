@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { db, initDb } from "@/lib/db"
+import { pool, initDb } from "@/lib/db"
 import { getVoterId } from "@/lib/voter"
 
 export async function GET(
@@ -20,10 +20,10 @@ export async function GET(
     }
 
     // Get all votes for this fight grouped by fighter
-    const result = await db.execute({
-      sql: "SELECT fighter, COUNT(*) as count FROM Vote WHERE fightId = ? GROUP BY fighter",
-      args: [fightId],
-    })
+    const result = await pool.query(
+      'SELECT fighter, COUNT(*)::int as count FROM "Vote" WHERE "fightId" = $1 GROUP BY fighter',
+      [fightId]
+    )
 
     const counts: Record<string, number> = {}
     let total = 0
@@ -38,10 +38,10 @@ export async function GET(
     let userVote: string | null = null
 
     if (voterId) {
-      const existing = await db.execute({
-        sql: "SELECT fighter FROM Vote WHERE fightId = ? AND voterId = ?",
-        args: [fightId, voterId],
-      })
+      const existing = await pool.query(
+        'SELECT fighter FROM "Vote" WHERE "fightId" = $1 AND "voterId" = $2',
+        [fightId, voterId]
+      )
       if (existing.rows.length > 0) {
         userVote = existing.rows[0].fighter as string
       }

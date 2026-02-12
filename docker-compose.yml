@@ -1,15 +1,31 @@
 services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: tsko
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tsko-secret}
+      POSTGRES_DB: tsko4
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tsko -d tsko4"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   app:
     build: .
     ports:
-      - "3000:3000"
+      - "80:3000"
     environment:
       - NODE_ENV=production
       - COOKIE_SECRET=${COOKIE_SECRET:-change-me-to-a-random-secret}
-    volumes:
-      # Persist the SQLite database across container restarts
-      - db-data:/app/prisma
+      - DATABASE_URL=postgresql://tsko:${POSTGRES_PASSWORD:-tsko-secret}@db:5432/tsko4
+    depends_on:
+      db:
+        condition: service_healthy
     restart: unless-stopped
 
 volumes:
-  db-data:
+  pgdata:

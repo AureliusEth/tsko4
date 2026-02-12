@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { db, initDb } from "@/lib/db"
+import { pool, initDb } from "@/lib/db"
 import { getVoterId, createAndSetVoterId } from "@/lib/voter"
 
 export async function POST(request: NextRequest) {
@@ -27,10 +27,10 @@ export async function POST(request: NextRequest) {
     const ipAddress = forwarded?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "127.0.0.1"
 
     // Check if this voter already voted on this fight
-    const existingByVoter = await db.execute({
-      sql: "SELECT fighter FROM Vote WHERE fightId = ? AND voterId = ?",
-      args: [fightId, voterId],
-    })
+    const existingByVoter = await pool.query(
+      'SELECT fighter FROM "Vote" WHERE "fightId" = $1 AND "voterId" = $2',
+      [fightId, voterId]
+    )
 
     if (existingByVoter.rows.length > 0) {
       return NextResponse.json(
@@ -40,10 +40,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if this IP already voted on this fight
-    const existingByIp = await db.execute({
-      sql: "SELECT fighter FROM Vote WHERE fightId = ? AND ipAddress = ?",
-      args: [fightId, ipAddress],
-    })
+    const existingByIp = await pool.query(
+      'SELECT fighter FROM "Vote" WHERE "fightId" = $1 AND "ipAddress" = $2',
+      [fightId, ipAddress]
+    )
 
     if (existingByIp.rows.length > 0) {
       return NextResponse.json(
@@ -53,10 +53,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Cast the vote
-    await db.execute({
-      sql: "INSERT INTO Vote (fightId, fighter, voterId, ipAddress) VALUES (?, ?, ?, ?)",
-      args: [fightId, fighter, voterId, ipAddress],
-    })
+    await pool.query(
+      'INSERT INTO "Vote" ("fightId", fighter, "voterId", "ipAddress") VALUES ($1, $2, $3, $4)',
+      [fightId, fighter, voterId, ipAddress]
+    )
 
     return NextResponse.json({ success: true, fighter })
   } catch (error) {

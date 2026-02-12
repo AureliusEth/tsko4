@@ -1,31 +1,32 @@
-import { createClient } from "@libsql/client"
-import path from "path"
+import { Pool } from "pg"
 
 const globalForDb = globalThis as unknown as {
-  db: ReturnType<typeof createClient>
+  pool: Pool
 }
 
-function createDb() {
-  const dbPath = path.join(process.cwd(), "prisma", "dev.db")
-  return createClient({ url: `file:${dbPath}` })
+function createPool() {
+  return new Pool({
+    connectionString: process.env.DATABASE_URL,
+    max: 20,
+  })
 }
 
-export const db = globalForDb.db || createDb()
+export const pool = globalForDb.pool || createPool()
 
-if (process.env.NODE_ENV !== "production") globalForDb.db = db
+if (process.env.NODE_ENV !== "production") globalForDb.pool = pool
 
 /** Initialize the database schema (idempotent) */
 export async function initDb() {
-  await db.execute(`
-    CREATE TABLE IF NOT EXISTS Vote (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      fightId INTEGER NOT NULL,
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS "Vote" (
+      id SERIAL PRIMARY KEY,
+      "fightId" INTEGER NOT NULL,
       fighter TEXT NOT NULL,
-      voterId TEXT NOT NULL,
-      ipAddress TEXT NOT NULL,
-      createdAt TEXT NOT NULL DEFAULT (datetime('now')),
-      UNIQUE(fightId, voterId),
-      UNIQUE(fightId, ipAddress)
+      "voterId" TEXT NOT NULL,
+      "ipAddress" TEXT NOT NULL,
+      "createdAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE("fightId", "voterId"),
+      UNIQUE("fightId", "ipAddress")
     )
   `)
 }
