@@ -9,7 +9,8 @@ interface Fighter {
   image: string
   flipHorizontal?: boolean
   scale?: number
-  mobileImageShiftClass?: string
+  mobileScale?: number
+  mobileShiftY?: number
 }
 
 interface FightCardProps {
@@ -135,11 +136,12 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
   const pctA = getPercentage(fighterA.name)
   const pctB = getPercentage(fighterB.name)
   const showFighters = mounted && assetsReady
-  const imageTransform = (fighter: Fighter) => {
-    const scale = fighter.scale ?? 1
-    const flipX = fighter.flipHorizontal ? -1 : 1
-    return `scaleX(${flipX}) scale(${scale})`
-  }
+
+  const wrapperStyle = (fighter: Fighter): React.CSSProperties => ({
+    '--d-scale': fighter.scale ?? 1,
+    '--m-scale': fighter.mobileScale ?? (fighter.scale ?? 1),
+    '--m-shift': `${fighter.mobileShiftY ?? -10}%`,
+  } as React.CSSProperties)
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -206,7 +208,7 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
             style={{ transitionDelay: "200ms" }}
             aria-label={`Vote for ${fighterA.name}`}
           >
-            <div className={`absolute inset-0 ${fighterA.mobileImageShiftClass ?? "-translate-y-[8%]"} md:translate-y-0`}>
+            <div className="absolute inset-0 fighter-img-wrap" style={wrapperStyle(fighterA)}>
               <Image
                 src={fighterA.image || "/placeholder.svg"}
                 alt={fighterA.name}
@@ -214,7 +216,10 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
                 className={`object-contain object-bottom transition-opacity duration-[1200ms] ease-out ${
                   showFighters ? "opacity-100" : "opacity-0"
                 }`}
-                style={{ transform: imageTransform(fighterA), transformOrigin: "center bottom" }}
+                style={{
+                  transform: fighterA.flipHorizontal ? "scaleX(-1)" : undefined,
+                  transformOrigin: "center bottom",
+                }}
                 sizes="50vw"
               />
             </div>
@@ -258,7 +263,7 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
             style={{ transitionDelay: "400ms" }}
             aria-label={`Vote for ${fighterB.name}`}
           >
-            <div className={`absolute inset-0 ${fighterB.mobileImageShiftClass ?? "-translate-y-[8%]"} md:translate-y-0`}>
+            <div className="absolute inset-0 fighter-img-wrap" style={wrapperStyle(fighterB)}>
               <Image
                 src={fighterB.image || "/placeholder.svg"}
                 alt={fighterB.name}
@@ -266,7 +271,10 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
                 className={`object-contain object-bottom transition-opacity duration-[1200ms] ease-out ${
                   showFighters ? "opacity-100" : "opacity-0"
                 }`}
-                style={{ transform: imageTransform(fighterB), transformOrigin: "center bottom" }}
+                style={{
+                  transform: fighterB.flipHorizontal ? "scaleX(-1)" : undefined,
+                  transformOrigin: "center bottom",
+                }}
                 sizes="50vw"
               />
             </div>

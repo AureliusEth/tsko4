@@ -15,10 +15,12 @@ const fights = [
     fighterA: {
       name: "seyi",
       image: "/images/seyimatchup.jpg",
+      mobileShiftY: -10,
     },
     fighterB: {
       name: "logan",
       image: "/images/loganmatchup.jpg",
+      mobileShiftY: -10,
     },
   },
   {
@@ -29,10 +31,12 @@ const fights = [
     fighterA: {
       name: "dani",
       image: "/images/danimatchup.jpg",
+      mobileShiftY: -10,
     },
     fighterB: {
       name: "leonie",
       image: "/images/leoniematchup.jpg",
+      mobileShiftY: -10,
     },
   },
   {
@@ -43,12 +47,12 @@ const fights = [
     fighterA: {
       name: "rain",
       image: "/images/Rainmatchup.jpg",
-      mobileImageShiftClass: "-translate-y-[10%]",
+      mobileShiftY: -16,
     },
     fighterB: {
       name: "osh",
       image: "/images/oshmatchup.jpg",
-      mobileImageShiftClass: "-translate-y-[8%]",
+      mobileShiftY: -15,
     },
   },
   {
@@ -59,12 +63,12 @@ const fights = [
     fighterA: {
       name: "shalome",
       image: "/images/SHALOMEMATCHUP.jpg",
-      mobileImageShiftClass: "-translate-y-[8%]",
+      mobileShiftY: -2,
     },
     fighterB: {
       name: "caroline",
       image: "/images/carolinematchup.jpg",
-      mobileImageShiftClass: "-translate-y-[8%]",
+      mobileShiftY: -2,
     },
   },
   {
@@ -75,14 +79,16 @@ const fights = [
     fighterA: {
       name: "matthew",
       image: "/images/matthewmatchup.jpg",
-      mobileImageShiftClass: "-translate-y-[12%]",
+      mobileShiftY: -12,
+      mobileScale: 1,
     },
     fighterB: {
       name: "nedas",
       image: "/images/nedasmatchup.jpg",
       flipHorizontal: true,
-      scale: 0.82,
-      mobileImageShiftClass: "-translate-y-[7%]",
+      scale: 1,
+      mobileScale: 0.9,
+      mobileShiftY: -10,
     },
   },
   {
@@ -93,12 +99,12 @@ const fights = [
     fighterA: {
       name: "robin",
       image: "/images/robinmatchup.jpg",
-      mobileImageShiftClass: "-translate-y-[10%]",
+      mobileShiftY: -12,
     },
     fighterB: {
       name: "doug",
       image: "/images/dougmatchup.jpg",
-      mobileImageShiftClass: "-translate-y-[10%]",
+      mobileShiftY: -12,
     },
   },
 ]
