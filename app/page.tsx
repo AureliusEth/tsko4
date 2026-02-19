@@ -1,19 +1,17 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FightMenu } from "@/components/fight-menu"
 import { FightCard } from "@/components/fight-card"
 
-// Generate demo start times: fight 1 starts now, each subsequent fight starts 20s later
-const BASE_TIME = Math.floor(Date.now() / 1000)
-const FIGHT_DURATION = 20 // seconds per fight for demo
+const toMinutesOfDay = (hour24: number, minute: number) => hour24 * 60 + minute
 
 const fights = [
   {
     id: 1,
-    label: "fight 01",
-    startTime: BASE_TIME,
-    endTime: BASE_TIME + FIGHT_DURATION,
+    label: "fight 1",
+    startTime: toMinutesOfDay(2, 20),
+    endTime: toMinutesOfDay(2, 30),
     fighterA: {
       name: "seyi",
       image: "/images/seyimatchup.jpg",
@@ -25,83 +23,88 @@ const fights = [
   },
   {
     id: 2,
-    label: "fight 02",
-    startTime: BASE_TIME + FIGHT_DURATION,
-    endTime: BASE_TIME + FIGHT_DURATION * 2,
+    label: "fight 2",
+    startTime: toMinutesOfDay(0, 30),
+    endTime: toMinutesOfDay(0, 40),
     fighterA: {
-      name: "fighter a",
-      image: "/images/seyimatchup.jpg",
+      name: "dani",
+      image: "/images/danimatchup.jpg",
     },
     fighterB: {
-      name: "fighter b",
-      image: "/images/loganmatchup.jpg",
+      name: "leonie",
+      image: "/images/leoniematchup.jpg",
     },
-    mockVotes: { "fighter a": 62, "fighter b": 38 },
   },
   {
     id: 3,
-    label: "fight 03",
-    startTime: BASE_TIME + FIGHT_DURATION * 2,
-    endTime: BASE_TIME + FIGHT_DURATION * 3,
+    label: "fight 3",
+    startTime: toMinutesOfDay(1, 40),
+    endTime: toMinutesOfDay(1, 50),
     fighterA: {
-      name: "fighter c",
-      image: "/images/seyimatchup.jpg",
+      name: "rain",
+      image: "/images/Rainmatchup.jpg",
     },
     fighterB: {
-      name: "fighter d",
-      image: "/images/loganmatchup.jpg",
+      name: "osh",
+      image: "/images/oshmatchup.jpg",
     },
-    mockVotes: { "fighter c": 45, "fighter d": 55 },
   },
   {
     id: 4,
-    label: "fight 04",
-    startTime: BASE_TIME + FIGHT_DURATION * 3,
-    endTime: BASE_TIME + FIGHT_DURATION * 4,
+    label: "fight 4",
+    startTime: toMinutesOfDay(1, 50),
+    endTime: toMinutesOfDay(2, 0),
     fighterA: {
-      name: "fighter e",
-      image: "/images/seyimatchup.jpg",
+      name: "shalome",
+      image: "/images/SHALOMEMATCHUP.jpg",
     },
     fighterB: {
-      name: "fighter f",
-      image: "/images/loganmatchup.jpg",
+      name: "caroline",
+      image: "/images/carolinematchup.jpg",
     },
-    mockVotes: { "fighter e": 81, "fighter f": 19 },
   },
   {
     id: 5,
-    label: "fight 05",
-    startTime: BASE_TIME + FIGHT_DURATION * 4,
-    endTime: BASE_TIME + FIGHT_DURATION * 5,
+    label: "fight 5",
+    startTime: toMinutesOfDay(3, 0),
+    endTime: toMinutesOfDay(3, 10),
     fighterA: {
-      name: "fighter g",
-      image: "/images/seyimatchup.jpg",
+      name: "matthew",
+      image: "/images/matthewmatchup.jpg",
     },
     fighterB: {
-      name: "fighter h",
-      image: "/images/loganmatchup.jpg",
+      name: "nedas",
+      image: "/images/nedasmatchup.jpg",
+      flipHorizontal: true,
     },
-    mockVotes: { "fighter g": 33, "fighter h": 67 },
   },
   {
     id: 6,
-    label: "fight 06",
-    startTime: BASE_TIME + FIGHT_DURATION * 5,
-    endTime: BASE_TIME + FIGHT_DURATION * 6,
+    label: "fight 6",
+    startTime: toMinutesOfDay(3, 10),
+    endTime: toMinutesOfDay(3, 20),
     fighterA: {
-      name: "fighter i",
-      image: "/images/seyimatchup.jpg",
+      name: "robin",
+      image: "/images/robinmatchup.jpg",
     },
     fighterB: {
-      name: "fighter j",
-      image: "/images/loganmatchup.jpg",
+      name: "doug",
+      image: "/images/dougmatchup.jpg",
     },
-    mockVotes: { "fighter i": 50, "fighter j": 50 },
   },
 ]
 
 export default function Page() {
+  const [mounted, setMounted] = useState(false)
   const [selectedFight, setSelectedFight] = useState<number | null>(null)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return <main className="min-h-screen bg-background" />
+  }
 
   const activeFight = fights.find((f) => f.id === selectedFight)
 

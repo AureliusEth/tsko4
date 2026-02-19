@@ -7,6 +7,7 @@ import { XLogo } from "./x-logo"
 interface Fighter {
   name: string
   image: string
+  flipHorizontal?: boolean
 }
 
 interface FightCardProps {
@@ -23,6 +24,13 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
   const [counts, setCounts] = useState<Record<string, number>>({})
   const [total, setTotal] = useState(0)
   const [voting, setVoting] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    // Trigger fade-in after a short delay for dramatic effect
+    const timer = setTimeout(() => setMounted(true), 100)
+    return () => clearTimeout(timer)
+  }, [])
 
   // Fetch existing votes on mount (merge with mock data)
   const fetchVotes = useCallback(async () => {
@@ -107,14 +115,18 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
         {/* Fighter names row */}
         <div className="flex items-center justify-between px-8 md:px-16 pt-16 pb-2">
           <span
-            className="text-foreground lowercase tracking-wider"
+            className={`text-foreground lowercase tracking-wider transition-all duration-700 ease-out ${
+              mounted ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
+            }`}
             style={{ fontSize: "clamp(1.4rem, 4vw, 2.5rem)" }}
           >
             {fighterA.name}
             {voted && <span className="ml-2 text-muted-foreground" style={{ fontSize: "0.6em" }}>{pctA}%</span>}
           </span>
           <span
-            className="text-foreground lowercase tracking-wider"
+            className={`text-foreground lowercase tracking-wider transition-all duration-700 ease-out ${
+              mounted ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
+            }`}
             style={{ fontSize: "clamp(1.4rem, 4vw, 2.5rem)" }}
           >
             {voted && <span className="mr-2 text-muted-foreground" style={{ fontSize: "0.6em" }}>{pctB}%</span>}
@@ -125,7 +137,9 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
         {/* Fighters and center text */}
         <div className="relative flex-1 flex items-stretch">
           {/* Left bar - height scales like a progress bar with fighter A votes */}
-          <div className="shrink-0 flex flex-col justify-end ml-4 md:ml-8" style={{ width: "9px" }}>
+          <div className={`shrink-0 flex flex-col justify-end ml-4 md:ml-8 transition-opacity duration-700 ease-out ${
+            mounted ? "opacity-100" : "opacity-0"
+          }`} style={{ width: "9px", transitionDelay: "300ms" }}>
             <div
               className="w-full bg-foreground transition-all duration-700 ease-out"
               style={{ height: voted ? `${Math.max(2, pctA)}%` : "100%" }}
@@ -137,13 +151,16 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
             type="button"
             onClick={() => castVote(fighterA.name)}
             disabled={!!voted || voting}
-            className={`relative flex-1 cursor-pointer transition-all duration-300 overflow-hidden ${
+            className={`relative flex-1 cursor-pointer transition-all duration-700 ease-out overflow-hidden ${
+              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+            } ${
               voted === fighterA.name
-                ? "opacity-100"
+                ? "!opacity-100"
                 : voted
-                  ? "opacity-30"
+                  ? "!opacity-30"
                   : "hover:scale-[1.02]"
             } ${voted || voting ? "cursor-default" : ""}`}
+            style={{ transitionDelay: "200ms" }}
             aria-label={`Vote for ${fighterA.name}`}
           >
             <Image
@@ -151,12 +168,15 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
               alt={fighterA.name}
               fill
               className="object-contain object-bottom"
+              style={fighterA.flipHorizontal ? { transform: "scaleX(-1)" } : undefined}
               sizes="50vw"
             />
           </button>
 
           {/* Center text - vertical */}
-          <div className="flex flex-col items-center justify-center shrink-0 z-10">
+          <div className={`flex flex-col items-center justify-center shrink-0 z-10 transition-all duration-700 ease-out ${
+            mounted ? "opacity-100" : "opacity-0"
+          }`} style={{ transitionDelay: "600ms" }}>
             <p
               className="text-foreground lowercase tracking-wider text-center"
               style={{
@@ -179,13 +199,16 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
             type="button"
             onClick={() => castVote(fighterB.name)}
             disabled={!!voted || voting}
-            className={`relative flex-1 cursor-pointer transition-all duration-300 overflow-hidden ${
+            className={`relative flex-1 cursor-pointer transition-all duration-700 ease-out overflow-hidden ${
+              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+            } ${
               voted === fighterB.name
-                ? "opacity-100"
+                ? "!opacity-100"
                 : voted
-                  ? "opacity-30"
+                  ? "!opacity-30"
                   : "hover:scale-[1.02]"
             } ${voted || voting ? "cursor-default" : ""}`}
+            style={{ transitionDelay: "400ms" }}
             aria-label={`Vote for ${fighterB.name}`}
           >
             <Image
@@ -193,12 +216,15 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
               alt={fighterB.name}
               fill
               className="object-contain object-bottom"
+              style={fighterB.flipHorizontal ? { transform: "scaleX(-1)" } : undefined}
               sizes="50vw"
             />
           </button>
 
           {/* Right bar - height scales like a progress bar with fighter B votes */}
-          <div className="shrink-0 flex flex-col justify-end mr-4 md:mr-8" style={{ width: "9px" }}>
+          <div className={`shrink-0 flex flex-col justify-end mr-4 md:mr-8 transition-opacity duration-700 ease-out ${
+            mounted ? "opacity-100" : "opacity-0"
+          }`} style={{ width: "9px", transitionDelay: "500ms" }}>
             <div
               className="w-full bg-foreground transition-all duration-700 ease-out"
               style={{ height: voted ? `${Math.max(2, pctB)}%` : "100%" }}

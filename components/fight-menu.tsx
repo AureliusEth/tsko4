@@ -10,18 +10,27 @@ interface FightMenuProps {
 
 export function FightMenu({ fights, onSelectFight }: FightMenuProps) {
   const [hoveredId, setHoveredId] = useState<number | null>(null)
-  const [now, setNow] = useState(Math.floor(Date.now() / 1000))
+  const [nowMinutes, setNowMinutes] = useState<number | null>(null)
 
   // Tick every second to check which fight is live
   useEffect(() => {
+    const getMinutesOfDay = () => {
+      const now = new Date()
+      return now.getHours() * 60 + now.getMinutes()
+    }
+
+    setNowMinutes(getMinutesOfDay())
     const interval = setInterval(() => {
-      setNow(Math.floor(Date.now() / 1000))
+      setNowMinutes(getMinutesOfDay())
     }, 1000)
     return () => clearInterval(interval)
   }, [])
 
   // Find the currently live fight
-  const liveFightId = fights.find((f) => now >= f.startTime && now < f.endTime)?.id ?? null
+  const liveFightId =
+    nowMinutes === null
+      ? null
+      : fights.find((f) => nowMinutes >= f.startTime && nowMinutes < f.endTime)?.id ?? null
 
   return (
     <div className="flex flex-col items-center h-screen bg-background px-6 py-10">
