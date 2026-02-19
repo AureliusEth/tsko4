@@ -9,6 +9,7 @@ interface Fighter {
   image: string
   flipHorizontal?: boolean
   scale?: number
+  mobileImageShiftClass?: string
 }
 
 interface FightCardProps {
@@ -27,11 +28,18 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
   const [voting, setVoting] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [assetsReady, setAssetsReady] = useState(false)
+  const [debugFraming, setDebugFraming] = useState(false)
 
   useEffect(() => {
     // Trigger fade-in after a short delay for dramatic effect
     const timer = setTimeout(() => setMounted(true), 100)
     return () => clearTimeout(timer)
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    const params = new URLSearchParams(window.location.search)
+    setDebugFraming(params.get("frameDebug") === "1")
   }, [])
 
   useEffect(() => {
@@ -198,7 +206,7 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
             style={{ transitionDelay: "200ms" }}
             aria-label={`Vote for ${fighterA.name}`}
           >
-            <div className="absolute inset-0 origin-bottom scale-[1.35] md:scale-100">
+            <div className={`absolute inset-0 ${fighterA.mobileImageShiftClass ?? "-translate-y-[8%]"} md:translate-y-0`}>
               <Image
                 src={fighterA.image || "/placeholder.svg"}
                 alt={fighterA.name}
@@ -250,7 +258,7 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
             style={{ transitionDelay: "400ms" }}
             aria-label={`Vote for ${fighterB.name}`}
           >
-            <div className="absolute inset-0 origin-bottom scale-[1.35] md:scale-100">
+            <div className={`absolute inset-0 ${fighterB.mobileImageShiftClass ?? "-translate-y-[8%]"} md:translate-y-0`}>
               <Image
                 src={fighterB.image || "/placeholder.svg"}
                 alt={fighterB.name}
@@ -273,6 +281,17 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
               style={{ height: voted ? `${Math.max(2, pctB)}%` : "100%" }}
             />
           </div>
+
+          {debugFraming && (
+            <div className="pointer-events-none absolute inset-0 z-30">
+              <div className="absolute inset-x-0 top-[15%] border-t border-red-500/70" />
+              <div className="absolute inset-x-0 top-[25%] border-t border-blue-500/60" />
+              <div className="absolute inset-x-0 top-[35%] border-t border-emerald-500/60" />
+              <div className="absolute left-2 top-2 rounded bg-black/60 px-2 py-1 text-[10px] text-white">
+                frameDebug on
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

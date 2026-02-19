@@ -43,10 +43,12 @@ const fights = [
     fighterA: {
       name: "rain",
       image: "/images/Rainmatchup.jpg",
+      mobileImageShiftClass: "-translate-y-[10%]",
     },
     fighterB: {
       name: "osh",
       image: "/images/oshmatchup.jpg",
+      mobileImageShiftClass: "-translate-y-[8%]",
     },
   },
   {
@@ -57,10 +59,12 @@ const fights = [
     fighterA: {
       name: "shalome",
       image: "/images/SHALOMEMATCHUP.jpg",
+      mobileImageShiftClass: "-translate-y-[8%]",
     },
     fighterB: {
       name: "caroline",
       image: "/images/carolinematchup.jpg",
+      mobileImageShiftClass: "-translate-y-[8%]",
     },
   },
   {
@@ -71,12 +75,14 @@ const fights = [
     fighterA: {
       name: "matthew",
       image: "/images/matthewmatchup.jpg",
+      mobileImageShiftClass: "-translate-y-[12%]",
     },
     fighterB: {
       name: "nedas",
       image: "/images/nedasmatchup.jpg",
       flipHorizontal: true,
       scale: 0.82,
+      mobileImageShiftClass: "-translate-y-[7%]",
     },
   },
   {
@@ -87,10 +93,12 @@ const fights = [
     fighterA: {
       name: "robin",
       image: "/images/robinmatchup.jpg",
+      mobileImageShiftClass: "-translate-y-[10%]",
     },
     fighterB: {
       name: "doug",
       image: "/images/dougmatchup.jpg",
+      mobileImageShiftClass: "-translate-y-[10%]",
     },
   },
 ]
