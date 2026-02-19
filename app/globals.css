@@ -109,7 +109,7 @@ body {
    --m-shift : mobile translateY (default -10%) – negative = shift up to reduce headroom */
 .fighter-img-wrap {
   transform-origin: center bottom;
-  transform: translateY(var(--m-shift, -10%)) scale(var(--m-scale, 1));
+  transform: translateY(var(--m-shift, 0%)) scale(var(--m-scale, 1));
 }
 
 @media (min-width: 768px) {

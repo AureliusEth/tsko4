@@ -139,8 +139,8 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
 
   const wrapperStyle = (fighter: Fighter): React.CSSProperties => ({
     '--d-scale': fighter.scale ?? 1,
-    '--m-scale': fighter.mobileScale ?? (fighter.scale ?? 1),
-    '--m-shift': `${fighter.mobileShiftY ?? -10}%`,
+    '--m-scale': fighter.mobileScale ?? 1,
+    '--m-shift': `${fighter.mobileShiftY ?? 0}%`,
   } as React.CSSProperties)
 
   return (
@@ -156,7 +156,7 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
       </button>
 
       {/* Main matchup area - fills the screen */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col w-full max-w-[430px] mx-auto md:max-w-none">
         {/* Fighter names row */}
         <div className="flex items-center justify-between px-8 md:px-16 pt-16 pb-2">
           <span
@@ -213,7 +213,7 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
                 src={fighterA.image || "/placeholder.svg"}
                 alt={fighterA.name}
                 fill
-                className={`object-contain object-bottom transition-opacity duration-[1200ms] ease-out ${
+                className={`object-cover object-[center_30%] md:object-contain md:object-bottom transition-opacity duration-[1200ms] ease-out ${
                   showFighters ? "opacity-100" : "opacity-0"
                 }`}
                 style={{
@@ -268,7 +268,7 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
                 src={fighterB.image || "/placeholder.svg"}
                 alt={fighterB.name}
                 fill
-                className={`object-contain object-bottom transition-opacity duration-[1200ms] ease-out ${
+                className={`object-cover object-[center_30%] md:object-contain md:object-bottom transition-opacity duration-[1200ms] ease-out ${
                   showFighters ? "opacity-100" : "opacity-0"
                 }`}
                 style={{
