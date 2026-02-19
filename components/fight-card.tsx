@@ -8,6 +8,7 @@ interface Fighter {
   name: string
   image: string
   flipHorizontal?: boolean
+  scale?: number
 }
 
 interface FightCardProps {
@@ -25,12 +26,40 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
   const [total, setTotal] = useState(0)
   const [voting, setVoting] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [assetsReady, setAssetsReady] = useState(false)
 
   useEffect(() => {
     // Trigger fade-in after a short delay for dramatic effect
     const timer = setTimeout(() => setMounted(true), 100)
     return () => clearTimeout(timer)
   }, [])
+
+  useEffect(() => {
+    let cancelled = false
+    setAssetsReady(false)
+
+    if (typeof window === "undefined") return
+
+    const preloadImage = (src: string) =>
+      new Promise<void>((resolve) => {
+        const img = new window.Image()
+        img.onload = () => resolve()
+        img.onerror = () => resolve()
+        img.src = src
+      })
+
+    Promise.all([preloadImage(fighterA.image), preloadImage(fighterB.image)]).then(() => {
+      if (cancelled) return
+      // Small delay makes the reveal feel intentional and smooth.
+      setTimeout(() => {
+        if (!cancelled) setAssetsReady(true)
+      }, 120)
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [fighterA.image, fighterB.image])
 
   // Fetch existing votes on mount (merge with mock data)
   const fetchVotes = useCallback(async () => {
@@ -97,6 +126,12 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
 
   const pctA = getPercentage(fighterA.name)
   const pctB = getPercentage(fighterB.name)
+  const showFighters = mounted && assetsReady
+  const imageTransform = (fighter: Fighter) => {
+    const scale = fighter.scale ?? 1
+    const flipX = fighter.flipHorizontal ? -1 : 1
+    return `scaleX(${flipX}) scale(${scale})`
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -152,7 +187,7 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
             onClick={() => castVote(fighterA.name)}
             disabled={!!voted || voting}
             className={`relative flex-1 cursor-pointer transition-all duration-700 ease-out overflow-hidden ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+              showFighters ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
             } ${
               voted === fighterA.name
                 ? "!opacity-100"
@@ -163,14 +198,18 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
             style={{ transitionDelay: "200ms" }}
             aria-label={`Vote for ${fighterA.name}`}
           >
-            <Image
-              src={fighterA.image || "/placeholder.svg"}
-              alt={fighterA.name}
-              fill
-              className="object-contain object-bottom"
-              style={fighterA.flipHorizontal ? { transform: "scaleX(-1)" } : undefined}
-              sizes="50vw"
-            />
+            <div className="absolute inset-0 origin-bottom scale-[1.35] md:scale-100">
+              <Image
+                src={fighterA.image || "/placeholder.svg"}
+                alt={fighterA.name}
+                fill
+                className={`object-contain object-bottom transition-opacity duration-[1200ms] ease-out ${
+                  showFighters ? "opacity-100" : "opacity-0"
+                }`}
+                style={{ transform: imageTransform(fighterA), transformOrigin: "center bottom" }}
+                sizes="50vw"
+              />
+            </div>
           </button>
 
           {/* Center text - vertical */}
@@ -200,7 +239,7 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
             onClick={() => castVote(fighterB.name)}
             disabled={!!voted || voting}
             className={`relative flex-1 cursor-pointer transition-all duration-700 ease-out overflow-hidden ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+              showFighters ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
             } ${
               voted === fighterB.name
                 ? "!opacity-100"
@@ -211,14 +250,18 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
             style={{ transitionDelay: "400ms" }}
             aria-label={`Vote for ${fighterB.name}`}
           >
-            <Image
-              src={fighterB.image || "/placeholder.svg"}
-              alt={fighterB.name}
-              fill
-              className="object-contain object-bottom"
-              style={fighterB.flipHorizontal ? { transform: "scaleX(-1)" } : undefined}
-              sizes="50vw"
-            />
+            <div className="absolute inset-0 origin-bottom scale-[1.35] md:scale-100">
+              <Image
+                src={fighterB.image || "/placeholder.svg"}
+                alt={fighterB.name}
+                fill
+                className={`object-contain object-bottom transition-opacity duration-[1200ms] ease-out ${
+                  showFighters ? "opacity-100" : "opacity-0"
+                }`}
+                style={{ transform: imageTransform(fighterB), transformOrigin: "center bottom" }}
+                sizes="50vw"
+              />
+            </div>
           </button>
 
           {/* Right bar - height scales like a progress bar with fighter B votes */}

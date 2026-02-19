@@ -76,6 +76,7 @@ const fights = [
       name: "nedas",
       image: "/images/nedasmatchup.jpg",
       flipHorizontal: true,
+      scale: 0.82,
     },
   },
   {
