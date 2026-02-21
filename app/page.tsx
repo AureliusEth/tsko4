@@ -13,12 +13,12 @@ const fights = [
     startTime: toMinutesOfDay(0, 20),
     endTime: toMinutesOfDay(0, 30),
     fighterA: {
-      name: "logan",
-      image: "/images/loganmatchup.jpg",
-    },
-    fighterB: {
       name: "seyi",
       image: "/images/seyimatchup.jpg",
+    },
+    fighterB: {
+      name: "logan",
+      image: "/images/loganmatchup.jpg",
     },
   },
   {
@@ -55,12 +55,12 @@ const fights = [
     startTime: toMinutesOfDay(1, 50),
     endTime: toMinutesOfDay(2, 0),
     fighterA: {
-      name: "caroline",
-      image: "/images/carolinematchup.jpg",
-    },
-    fighterB: {
       name: "shalome",
       image: "/images/SHALOMEMATCHUP.jpg",
+    },
+    fighterB: {
+      name: "caroline",
+      image: "/images/carolinematchup.jpg",
     },
   },
   {
@@ -85,12 +85,12 @@ const fights = [
     startTime: toMinutesOfDay(3, 10),
     endTime: toMinutesOfDay(3, 20),
     fighterA: {
-      name: "doug",
-      image: "/images/dougmatchup.jpg",
-    },
-    fighterB: {
       name: "robin",
       image: "/images/robinmatchup.jpg",
+    },
+    fighterB: {
+      name: "doug",
+      image: "/images/dougmatchup.jpg",
     },
   },
   {
