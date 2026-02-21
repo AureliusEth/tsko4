@@ -33,6 +33,8 @@ const fights = [
     fighterB: {
       name: "leonie",
       image: "/images/leoniematchup.jpg",
+      scale: 1.01,
+      mobileScale: 1.01,
     },
   },
   {
@@ -47,6 +49,8 @@ const fights = [
     fighterB: {
       name: "lv2",
       image: "/images/lv2matchup.jpg",
+      scale: 0.94,
+      mobileScale: 0.94,
     },
   },
   {
@@ -76,7 +80,8 @@ const fights = [
       name: "nedas",
       image: "/images/nedasmatchup.jpg",
       flipHorizontal: true,
-      scale: 0.82,
+      scale: 0.92,
+      mobileScale: 0.92,
     },
   },
   {
