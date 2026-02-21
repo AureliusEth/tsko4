@@ -10,15 +10,15 @@ const fights = [
   {
     id: 1,
     label: "fight 1",
-    startTime: toMinutesOfDay(2, 20),
-    endTime: toMinutesOfDay(2, 30),
+    startTime: toMinutesOfDay(0, 20),
+    endTime: toMinutesOfDay(0, 30),
     fighterA: {
-      name: "seyi",
-      image: "/images/seyimatchup.jpg",
-    },
-    fighterB: {
       name: "logan",
       image: "/images/loganmatchup.jpg",
+    },
+    fighterB: {
+      name: "seyi",
+      image: "/images/seyimatchup.jpg",
     },
   },
   {
@@ -45,8 +45,8 @@ const fights = [
       image: "/images/Rainmatchup.jpg",
     },
     fighterB: {
-      name: "osh",
-      image: "/images/oshmatchup.jpg",
+      name: "lv2",
+      image: "/images/lv2matchup.jpg",
     },
   },
   {
@@ -55,12 +55,12 @@ const fights = [
     startTime: toMinutesOfDay(1, 50),
     endTime: toMinutesOfDay(2, 0),
     fighterA: {
-      name: "shalome",
-      image: "/images/SHALOMEMATCHUP.jpg",
-    },
-    fighterB: {
       name: "caroline",
       image: "/images/carolinematchup.jpg",
+    },
+    fighterB: {
+      name: "shalome",
+      image: "/images/SHALOMEMATCHUP.jpg",
     },
   },
   {
@@ -85,12 +85,27 @@ const fights = [
     startTime: toMinutesOfDay(3, 10),
     endTime: toMinutesOfDay(3, 20),
     fighterA: {
+      name: "doug",
+      image: "/images/dougmatchup.jpg",
+    },
+    fighterB: {
       name: "robin",
       image: "/images/robinmatchup.jpg",
     },
+  },
+  {
+    id: 7,
+    label: "fight 7",
+    startTime: toMinutesOfDay(3, 50),
+    endTime: toMinutesOfDay(4, 0),
+    fighterA: {
+      name: "osh",
+      image: "/images/oshmatchup.jpg",
+      flipHorizontal: true,
+    },
     fighterB: {
-      name: "doug",
-      image: "/images/dougmatchup.jpg",
+      name: "ziggy",
+      image: "/images/ziggymatchup.jpg",
     },
   },
 ]
