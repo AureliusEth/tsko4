@@ -33,8 +33,8 @@ const fights = [
     fighterB: {
       name: "leonie",
       image: "/images/leoniematchup.jpg",
-      scale: 1.01,
-      mobileScale: 1.01,
+      scale: 1.05,
+      mobileScale: 1.05,
     },
   },
   {
