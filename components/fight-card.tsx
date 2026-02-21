@@ -213,7 +213,7 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
                 src={fighterA.image || "/placeholder.svg"}
                 alt={fighterA.name}
                 fill
-                className={`object-cover object-[center_30%] md:object-contain md:object-bottom transition-opacity duration-[1200ms] ease-out ${
+                className={`object-contain object-bottom transition-opacity duration-[1200ms] ease-out ${
                   showFighters ? "opacity-100" : "opacity-0"
                 }`}
                 style={{
@@ -268,7 +268,7 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
                 src={fighterB.image || "/placeholder.svg"}
                 alt={fighterB.name}
                 fill
-                className={`object-cover object-[center_30%] md:object-contain md:object-bottom transition-opacity duration-[1200ms] ease-out ${
+                className={`object-contain object-bottom transition-opacity duration-[1200ms] ease-out ${
                   showFighters ? "opacity-100" : "opacity-0"
                 }`}
                 style={{
