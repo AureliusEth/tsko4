@@ -113,9 +113,14 @@ export function FightCard({ fightId, fightLabel, fighterA, fighterB, mockVotes, 
       const data = await res.json()
 
       if (res.ok) {
+        // Optimistically update counts so percentages are correct immediately
+        const newCounts = { ...counts, [fighterName]: (counts[fighterName] || 0) + 1 }
+        const newTotal = total + 1
+        setCounts(newCounts)
+        setTotal(newTotal)
         setVoted(fighterName)
-        // Refresh counts
-        await fetchVotes()
+        // Sync with server in background
+        fetchVotes()
       } else if (data.error === "already_voted") {
         // They already voted (maybe from another tab or IP match)
         setVoted(data.vote)
